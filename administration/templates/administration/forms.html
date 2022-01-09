@@ -1,0 +1,14 @@
+{% extends "administration/admin_panel.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load template_filters %}
+{% csrf_token %}
+<div id = "form_container">
+    <h1>{{form_title|access:0}} : {{form_title|access:1}}</h1>
+    <form id = "form" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit">Zatwierdz</button>
+    </form>
+</div>
+{% endblock content %}

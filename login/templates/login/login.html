@@ -1,0 +1,18 @@
+{% extends "home/base.html" %}
+{% block content %}
+<div class="title_jpg">
+    <h2 style="text-align: center;">Szpital Specjalistyczny im.Ludwika Rydygiera w Krakowie</h2>
+</div>
+{% if fail %}
+    <p id ="fail">{{fail}}</p>
+{% endif %}
+<p></p>
+    <form id = "form" method="POST">
+        {% csrf_token %}
+        {% for question in form %}
+            <p>{{ question.label }}:{{ question }}</p>
+        {% endfor %}
+        <button type="submit" id="login" style="padding: 3px; align-items: center;">Zaloguj</button>
+        
+    </form>
+{% endblock content %}

@@ -1,0 +1,32 @@
+{% load static %}
+<!doctype html>
+
+
+<head>
+
+    <style>
+        body{
+            background-image: url("/static/home/foto1.jpg")
+        }  
+    </style>    
+
+
+    </style>
+
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/base.css' %}">
+    {% if title %}
+            <title>Magazyn materialow medycznych - {{title}}</title>
+    {% else %}
+            <title>Magazyn materialow medycznych</title>
+    {% endif %}
+</head>
+
+<body>
+    <main>
+{% block content %}{% endblock %}</div>
+
+
+
+    </main>
+</body>

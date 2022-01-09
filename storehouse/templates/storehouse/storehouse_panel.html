@@ -1,0 +1,85 @@
+{% load static %}
+
+
+<script>
+        var m = document.getElementsByClassName("alert");  // Return an array
+        
+        setTimeout(function(){
+           if (m && m.length) {
+               m[0].classList.add('hide');
+           }
+        }, 3000);
+</script>
+
+
+<!doctype html>
+<head>
+
+<style>      
+  .alert {
+    float:right;
+    border: 5px solid green;
+    width: 100%;
+    background-color: rgb(14, 172, 0);
+    padding: 5px;
+    opacity: 1;
+    text-align: center;
+    visibility: visible;
+    transform: translateX(0px);
+    transition: visibility 0s, opacity 250ms, transform 250ms;
+}
+.alert.hide {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(-10px); 
+    transition: visibility 0s 250ms, opacity 250ms, transform 250ms;
+}
+</style>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/base.css' %}">
+  
+    
+    {% if title %}
+            <title>Magazyn materialow medycznych - {{title}}</title>
+    {% else %}
+            <title>Magazyn materialow medycznych</title>
+    {% endif %}
+
+
+</head>
+
+
+
+
+<body>
+ 
+       
+
+
+
+        <div id = 'navbar' class='sidenav' style="width: 300px;">
+                <a href="{% url 'profile' %}"> Profil </a>
+                <a href="{% url 'createorder' %}">Utwórz zamówienie</a>
+                <a href="{% url 'order_view' %}">Edytuj zamówienie</a>
+                <a href="{% url 'logout' %}"> Wyloguj się</a>
+        </div>
+   
+        <main class='main' style="padding-left: 50px;">
+
+               {% if messages %}
+               {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+        </div>
+               {% endfor %}
+        {% endif %}  
+
+
+
+            {% block content %}          
+            {% endblock %}
+        </main>
+    
+</body>
+
+

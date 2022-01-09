@@ -1,0 +1,55 @@
+{% load static %}
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/base.css' %}">
+  
+    
+    {% if title %}
+            <title>Magazyn materialow medycznych - {{title}}</title>
+    {% else %}
+            <title>Magazyn materialow medycznych</title>
+    {% endif %}
+
+    {% if user_acces_admin %}
+    <body>
+        <div id = 'navbar' class='sidenav'>
+            <a href="{% url 'profile' %}"> Profil </a>
+            <a href="{% url 'operations' %}">Operacje</a>
+            <a href="{% url 'logout' %}"> Wyloguj się</a>
+        </div>
+        
+       
+    </body>
+    {% endif %}
+    {% if user_acces_mag %}
+    <div id = 'navbar' class='sidenav'>
+    
+        <a href="{% url 'profile' %}"> Profil </a>
+        <a href="{% url 'home' %}">Przyjmij zamówienie</b</a>
+        <a href="{% url 'home' %}">Wydaj zamówienie</b</a>
+
+        <a href="{% url 'logout' %}"> Wyloguj się</a>
+    </div>
+    {% endif %}
+
+    {% if user_acces_zam %}
+    <div id = 'navbar' class='sidenav'>
+    
+        <a href="{% url 'profile' %}"> Profil </a>
+                <a href="{% url 'createorder' %}">Utwórz zamówienie</a>
+                <a href="{% url 'order_view' %}">Edytuj zamówienie</a>
+                <a href="{% url 'logout' %}"> Wyloguj się</a>
+    </div>
+    {% endif %}
+
+</head>
+
+<body>
+    <div class=main>
+        {% block content %}
+
+        {% endblock %}
+    </div>
+    
+</body>

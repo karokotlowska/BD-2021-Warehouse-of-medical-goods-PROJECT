@@ -1,0 +1,48 @@
+{% load static %}
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" type="text/css" href="{% static 'home/base.css' %}">
+  
+    
+    {% if title %}
+            <title>Magazyn materialow medycznych - {{title}}</title>
+    {% else %}
+            <title>Magazyn materialow medycznych</title>
+    {% endif %}
+
+
+</head>
+
+<body>
+  
+        <div id = 'navbar' class='sidenav' style="width: 300px;">
+            <a href="{% url 'profile' %}"> Profil </a>
+            <a href="{% url 'logout' %}"> Wyloguj się</a>
+            <a href="{% url 'operations' %}">Operacje</a>
+            
+            
+
+            <p style="color: grey;">INSERT:</p>
+             <a href="/manage/?method=insert&resource=pracownik_stanowisko">dodaj pracownik_stanowisko</a> 
+             <a href="/manage/?method=insert&resource=pracownik">dodaj pracownika</a> 
+             <p style="color: grey;">SELECT:</p>
+             <a href="/manage/?method=select&resource=pracownik_stanowisko">pokaż pracownik_stanowisko</a> 
+             <a href="/manage/?method=select&resource=pracownik">pokaż pracownik</a> 
+             <a href="/manage/?method=select&resource=weryfikacja">pokaż weryfikacja</a> 
+             <a href="/manage/?method=select&resource=all">pokaż wszystko</a> 
+             <p style="color: grey;">UPDATE:</p>
+             <a href="/manage/?method=update&resource=pracownik_stanowisko">zmień pracownik_stanowisko</a> 
+             <a href="/manage/?method=update&resource=pracownik">zmień pracownik</a> 
+             <a href="/manage/?method=update&resource=weryfikacja">zmień weryfikacja</a> 
+             <p style="color: grey;">DELETE:</p>
+             <a href="/manage/?method=delete&resource=pracownik_stanowisko">usuń pracownik_stanowisko</a> 
+             <a href="/manage/?method=delete&resource=pracownik">usuń pracownik</a> 
+             <a href="/manage/?method=delete&resource=weryfikacja">usuń weryfikacja</a> 
+        </div>
+   
+        <main class='main' style="padding-left: 50px;">
+            {% block content %}{% endblock %}
+        </div>
+    
+</body>
