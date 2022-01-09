@@ -1,1 +1,1 @@
-web: gunicorn magazyn_med_proj.wsgi --log-file -
+web: gunicorn magazyn_proj.wsgi --log-file -
