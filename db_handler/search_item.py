@@ -22,7 +22,7 @@ def filter(data):
     
     for desc,value in cleanedData.items():
         print(value)
-        print("l")
+    
         if value == 'on':
             if desc == 'aktywne' or desc == 'w realizacji' or desc == 'zrealizowane':
                checkBoxStatus.append(desc)
@@ -39,11 +39,13 @@ def filter(data):
             for x in checkBoxStatus[1:]:
                 statusQuery+="|"+x
     
-    print(kwota)
 
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
-    if len(sort) >0 and len(kwota)>0:
+    if len(kwota)==0:
+        kwota.append(1)
+        kwota.append(pow(10,10))
+    if len(sort) >0:
         sort.append(cleanedData["sort_type"])
         postgreSQL_select_Query = '''SELECT z.numer_kolejny_zamowienia, z.id_zamowienia, z.data_stworzenia, z.status, z.kwota FROM magazyn.zamowienie Z
                                     
@@ -56,17 +58,17 @@ def filter(data):
                                     '''.format(statusQuery,kwota[0],kwota[1],sort[0],sort[1])
         cur.execute(postgreSQL_select_Query)
         mobile_records = cur.fetchall()
+   
     else:
         postgreSQL_select_Query = '''SELECT z.numer_kolejny_zamowienia, z.id_zamowienia, z.data_stworzenia, z.status, z.kwota FROM magazyn.zamowienie Z
                                     
                                     
                                     WHERE z.status ~* \'{}\'
+                                    AND (kwota BETWEEN {} AND {})
                                    
-                                   
-                                    '''.format(statusQuery)
+                                    '''.format(statusQuery,kwota[0],kwota[1])
         cur.execute(postgreSQL_select_Query)
         mobile_records = cur.fetchall()
-
     if mobile_records is None:
         cur.close()
         con.close()

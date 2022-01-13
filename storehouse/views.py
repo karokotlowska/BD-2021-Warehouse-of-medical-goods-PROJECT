@@ -120,12 +120,23 @@ def edit_order_view(request, form_data):
             return render(request,'storehouse/show_edit_order.html',{'form':form,'select2':select2, 'numer_kolejny_zamowienia':id})
 
 
-def search_orders(request):
-    data = search_item.filter(request.GET)  #zwrocone zamowienia ktore spelniaja warunki
+def render_search_site(request,data):
     products=admin_select.productListForSearch()     #wszytskie produkty
     filters_min_max_values = get_min_max_values.get_min_max_values()
     return render(request,'storehouse/search_orders.html',{'data':data,'products':products,'filters_limits':filters_min_max_values})
 
+
+def search_orders(request):
+    data = search_item.filter(request.GET)  #zwrocone zamowienia ktore spelniaja warunki
+    request.session['zam'] = request.build_absolute_uri()
+    return render_search_site(request,data)
+
+'''def search_orders(request):
+    data = search_item.filter(request.GET)  #zwrocone zamowienia ktore spelniaja warunki
+    products=admin_select.productListForSearch()     #wszytskie produkty
+    filters_min_max_values = get_min_max_values.get_min_max_values()
+    return render(request,'storehouse/search_orders.html',{'data':data,'products':products,'filters_limits':filters_min_max_values})
+'''
 
 '''def create_order(request):
 
