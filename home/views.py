@@ -3,7 +3,7 @@ from django.contrib import messages
 
 from login.views import get_session_role
 
-
+from db_handler import admin_select
 from django.http import HttpResponse
 
 #logged user home
@@ -17,15 +17,20 @@ def start_page(request):
 def profile(request):
     role=get_session_role(request)
     print("rola: "+role)
+    id=request.session['user_id']
+    print(id)
     if role:
         if role=='adm':
-            return render(request, 'home/profile.html',{'title':'login','user_acces_admin':1})
+            select=admin_select.admin_profile_select("Dane:",id)
+            return render(request,'home/profile.html',{'select':select,'title':'login','user_acces_admin':1})
+            #return render(request, 'home/profile.html',{'title':'login','user_acces_admin':1})
         if role=='mag':
-            return render(request, 'home/profile.html',{'title':'login','user_acces_mag':1})
+            select=admin_select.admin_profile_select("Dane:",id)
+            return render(request,'home/profile.html',{'select':select,'title':'login','user_acces_mag':1})
+            #return render(request, 'home/profile.html',{'title':'login','user_acces_mag':1})
         if role=='zam':
-            return render(request, 'home/profile.html',{'title':'login','user_acces_zam':1})
+            select=admin_select.admin_profile_select("Dane:",id)
+            return render(request,'home/profile.html',{'select':select,'title':'login','user_acces_zam':1})
+            #return render(request, 'home/profile.html',{'title':'login','user_acces_zam':1})
     else:
         return HttpResponse('Brak dostępu', status=401)
-
-
-    

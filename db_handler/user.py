@@ -8,6 +8,7 @@ class User:
         self.is_mag=False
         self.is_zam=False
         self.is_superUser=False
+       
 
     def __del__(self):
         self.connection.close()
@@ -39,7 +40,7 @@ class User:
             login_status = [False,'Nie ma takiego uzytkownika !']
         else:
             login_status = self.check_user_password(user_record,login_data['password'])
-            user_type=self.check_user_role(user_record)           
+            user_type=self.check_user_role(user_record)   
             self.check_menu(user_type)
             login_status=[True, user_type[0]]
         cursor.close()

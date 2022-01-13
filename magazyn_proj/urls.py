@@ -40,6 +40,10 @@ urlpatterns = [
     path('createorder/', storehouse_views.create_order, name='createorder'),
     path('createorder/order_view/', storehouse_views.order_view, name='order_view'),
     path('add_product/', storehouse_views.add_product, name='add_product'),
+    path('del_product/', storehouse_views.del_product, name='del_product'),
+    path('change_order_status/', storehouse_views.change_order_status, name='change_order_status'),
+    path('editorder/', storehouse_views.edit_order, name='editorder'),
+    path('searchorders/', storehouse_views.search_orders, name='searchorders'),
 
 
 ]

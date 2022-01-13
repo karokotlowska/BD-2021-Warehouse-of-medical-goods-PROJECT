@@ -2,8 +2,30 @@
 {% load static %}
 {% block content %}
     <div>
-        <img src="{% static 'home/profil.png' %}" alt="profil" width="60px" height="60px" style="padding-right: 10px;">
-        <h1 style="font-size: 30px;line-height: 30px; height: 30px;display: inline  ;align-items: center; vertical-align: up; border: 1px solid black;">TWÓJ PROFIL</h1>
+        <img src="{% static 'home/profil.png' %}" alt="profil" width="60px" height="60px" style="padding-right: 10px; padding-top: 10px;">
+        <h1 style="font-size: 60px;line-height: 30px; height: 30px;display: inline  ;align-items: center; vertical-align: up; border: 1px solid black;">TWÓJ PROFIL</h1>
+    </div>
+
+    <div id = "db_container" style="padding-bottom: 10px; float:left;">
+        {% for table,data in select.items %}
+            <h1>{{table}}</h1>
+            <table style="border: 1px solid grey; padding: 30px; width: 800px; ">
+                <tr>
+                    {% for column_name in data|access:0 %}
+                        <td class="db_cell"><h3>{{column_name }}</h3></td>
+                    {% endfor %}
+                </tr>
+                
+                {% for row in data|access:1 %}
+                    <tr>
+                        {% for info in row %}
+                            <td class="db_cell">{{info}}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+            </table>
+        {% endfor %}
+    
     </div>
     
 {% endblock content %}

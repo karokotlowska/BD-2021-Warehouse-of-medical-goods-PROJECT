@@ -28,7 +28,7 @@
         <a href="{% url 'profile' %}"> Profil </a>
         <a href="{% url 'home' %}">Przyjmij zamówienie</b</a>
         <a href="{% url 'home' %}">Wydaj zamówienie</b</a>
-
+        <a href="{% url 'home' %}">Historia zamówień</b</a>
         <a href="{% url 'logout' %}"> Wyloguj się</a>
     </div>
     {% endif %}
@@ -38,7 +38,8 @@
     
         <a href="{% url 'profile' %}"> Profil </a>
                 <a href="{% url 'createorder' %}">Utwórz zamówienie</a>
-                <a href="{% url 'order_view' %}">Edytuj zamówienie</a>
+                <a href="{% url 'editorder' %}">Edytuj zamówienie</a>
+                <a href="{% url 'searchorders' %}">Przeglądaj zamówienia</a>
                 <a href="{% url 'logout' %}"> Wyloguj się</a>
     </div>
     {% endif %}

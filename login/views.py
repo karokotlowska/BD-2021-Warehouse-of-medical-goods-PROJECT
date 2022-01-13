@@ -12,8 +12,10 @@ def login(request):
         if form.is_valid():
             user = User()
             status = user.login(form.cleaned_data)
+            id=user.get_staff_id(form.cleaned_data)
+            print(id)
             if status[0] == True:
-                set_session(request,status[1])
+                set_session(request,status[1],id)
                 #return redirect('home')
                 if status[1]=='adm':
                     return render(request,'home/home.html',{'form':form,'title':'login','user_acces_admin':1})
@@ -29,8 +31,9 @@ def login(request):
     return render(request, 'login/login.html',{'form':form})
 
 
-def set_session(request, role):
+def set_session(request, role,id):
     request.session['user_role']=role
+    request.session['user_id']=id
     
 
 def get_session_role(request):
@@ -39,9 +42,16 @@ def get_session_role(request):
     except KeyError:
         return None
 
+def get_session_user_id(request):
+    try:
+        return request.session['user_id']
+    except KeyError:
+        return None
+
 def logout(request):
     try:
         del request.session['user_role']
+        del request.session['user_id']
         del request.session['redirect']
     except KeyError:
         pass

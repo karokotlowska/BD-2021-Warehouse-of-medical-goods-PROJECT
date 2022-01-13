@@ -15,3 +15,14 @@ class CreateOrder(forms.Form):
     CHOICES=zam_order.companyList()
     company = forms.ChoiceField(required=False,label = 'id_firmy', widget=forms.Select, choices=CHOICES)
 
+class EditOrder(forms.Form):
+    id_zamowienia = forms.CharField(required=False,label = 'id_zamowienia', max_length=1000)
+
+
+class ProductToDelete(forms.Form):
+    CHOICES=admin_select.productList()
+    produkt = forms.ChoiceField(required=False,label = 'produkt', widget=forms.Select, choices=CHOICES)
+
+class OrderStatus(forms.Form):
+    CHOICES=(['aktywne','aktywne'], ['w realizacji','w realizacji'],['zrealizowane','zrealizowane'])
+    status=forms.ChoiceField(required=False,label = 'status', widget=forms.Select, choices=CHOICES)
