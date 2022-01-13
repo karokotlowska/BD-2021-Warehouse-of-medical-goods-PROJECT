@@ -51,9 +51,13 @@ def add_product(request):
     if form.is_valid():
             if request.method=='POST':
                     print('drugipost')
-                    zam_order.zam_receipt_product(form.cleaned_data,id,user_id)
-                    select2=admin_select.order_details(id)
-                    messages.success(request, 'Przyjęto produkt.')
+                    error=zam_order.zam_receipt_product(form.cleaned_data,id,user_id)
+                    if error =='error':
+                        select2=admin_select.order_details(id)
+                        messages.error(request, 'Brak zamówienia na ten produkt.')
+
+                    else:
+                        messages.success(request, 'Przyjęto produkt.')
 
             return render(request,'storehouse_action_handler/add_product_to_storehouse.html',{'form':form,'form_title':['PRZYMIJ PRODUKTY NA MAGAZYN',""],'select':select,'select2':select2, 'numer_kolejny_zamowienia':id})
 
@@ -83,10 +87,13 @@ def search_order_view_remove(request, form_data):
         if form.is_valid():
             if request.method=='POST':
                     print('drugipostDZINWY')
-                    storehouse.removal(form_data['magazyn'],form_data['ilosc'],form_data['produkt'],user_id)
+                    error=storehouse.removal(form_data['magazyn'],form_data['ilosc'],form_data['produkt'],user_id)
                     select2=admin_select.storehouse_view(form_data['magazyn'])
+                    if error=='error':
+                        messages.success(request, 'Błędna ilość produktów do wydania, bądź taki produkt nie jest na magazynie.')
 
-                    messages.success(request, 'Wydano produkt.')
+                    else:
+                        messages.success(request, 'Wydano produkt.')
 
                     #zam_order.zam_insert_product(form.cleaned_data,id)
             return render(request,'storehouse_action_handler/removal_show_all.html',{'form':form,'select2':select2,'form_title':['wydaj','produkty']})
