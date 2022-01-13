@@ -47,8 +47,9 @@ def filter(data):
                                     
                                     
                                     
-                                    AND (kwota BETWEEN {} AND {})
+                                    
                                     WHERE z.status ~* \'{}\'
+                                    AND (kwota BETWEEN {} AND {})
                                     ORDER BY {} {}
                                     '''.format(statusQuery,kwota[0],kwota[1],sort[0],sort[1])
         cur.execute(postgreSQL_select_Query)
