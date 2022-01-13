@@ -1,0 +1,16 @@
+{% extends "storehouse_action_handler/magazynier_panel.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load template_filters %}
+{% csrf_token %}
+<h2>Wpisz id zamówienia, które chcesz przyjąć.</h2>
+
+<div id = "form_container">
+    <h1>{{form_title|access:0}} : {{form_title|access:1}}</h1>
+    <form id = "form" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit">Zatwierdź</button>
+    </form>
+</div>
+{% endblock content %}

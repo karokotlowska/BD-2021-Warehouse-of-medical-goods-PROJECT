@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'login.apps.LoginConfig',
     'administration.apps.AdministrationConfig',
     'storehouse.apps.StorehouseConfig',
+    'storehouse_action_handler.apps.StorehouseActionHandlerConfig',
     'crispy_forms',
 
     

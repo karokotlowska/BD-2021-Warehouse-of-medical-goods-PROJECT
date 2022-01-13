@@ -77,3 +77,73 @@ def filter(data):
         return_data = create_data_from_fetch(mobile_records,cur)
       
     return return_data
+
+
+
+
+
+
+
+
+
+
+
+
+def filter_storehouse(data):
+    cleanedData  = {a:b for a,b in data.items()}
+    checkBoxStatus = []
+    sort=[]
+    
+    
+    for desc,value in cleanedData.items():
+        print(value)
+    
+        if value == 'on':
+            if desc == 'prz' or desc == 'wyd':
+               checkBoxStatus.append(desc)
+               print()
+        if 'sort' == desc:
+            sort.append(value)
+       
+        
+    statusQuery = ""
+    if len(checkBoxStatus) > 0:
+        statusQuery+= checkBoxStatus[0]
+        if len(checkBoxStatus) > 1:
+            for x in checkBoxStatus[1:]:
+                statusQuery+="|"+x
+    
+
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    
+    if len(sort) >0:
+        sort.append(cleanedData["sort_type"])
+        postgreSQL_select_Query = '''SELECT z.numer_kolejny_zamowienia, z.id_operacji, z.data_operacji, mo.opis FROM magazyn.magazyn_operacje Z JOIN magazyn.rodzaj_operacji MO USING (rodzaj_operacji)
+                                    
+                                    
+                                    
+                                    
+                                    WHERE z.rodzaj_operacji ~* \'{}\'
+                                    ORDER BY {} {}
+                                    '''.format(statusQuery,sort[0],sort[1])
+        cur.execute(postgreSQL_select_Query)
+        mobile_records = cur.fetchall()
+   
+    else:
+        postgreSQL_select_Query = '''SELECT z.numer_kolejny_zamowienia, z.id_operacji, z.data_operacji, mo.opis FROM magazyn.magazyn_operacje Z JOIN magazyn.rodzaj_operacji MO USING (rodzaj_operacji)
+                                    
+                                    
+                                    WHERE z.rodzaj_operacji ~* \'{}\'
+                                   
+                                    '''.format(statusQuery)
+        cur.execute(postgreSQL_select_Query)
+        mobile_records = cur.fetchall()
+    if mobile_records is None:
+        cur.close()
+        con.close()
+        return []
+    else:
+        return_data = create_data_from_fetch(mobile_records,cur)
+      
+    return return_data

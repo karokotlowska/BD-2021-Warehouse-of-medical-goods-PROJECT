@@ -20,6 +20,7 @@ from home import views as home_views
 from login import views as login_views 
 from administration import views as administration_views
 from storehouse import views as storehouse_views
+from storehouse_action_handler import views as storehouse_action_handler_views
 
 
 
@@ -44,6 +45,15 @@ urlpatterns = [
     path('change_order_status/', storehouse_views.change_order_status, name='change_order_status'),
     path('editorder/', storehouse_views.edit_order, name='editorder'),
     path('searchorders/', storehouse_views.search_orders, name='searchorders'),
+
+
+    path('receipt/', storehouse_action_handler_views.receipt, name='receipt'),
+    path('removal/', storehouse_action_handler_views.removal, name='removal'),
+    path('searchoperations/', storehouse_action_handler_views.searchoperations, name='searchoperations'),
+
+    path('add_product_to_storehoue/', storehouse_action_handler_views.add_product, name='add_product_to_storehoue'),
+
+
 
 
 ]

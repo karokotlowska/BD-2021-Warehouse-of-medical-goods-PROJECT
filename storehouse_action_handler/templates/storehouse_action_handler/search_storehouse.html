@@ -1,0 +1,57 @@
+{% extends "storehouse_action_handler/magazynier_panel.html" %}
+{% load static %}
+{% load template_filters %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div id = "filter_bar" style="float: left;width: 30%; overflow:hidden; height: 100%; ">
+    <form method="GET" action="{% url 'searchoperations' %}">
+        <h3>Operacje</h3>
+        <p><input type="checkbox" name="prz"> Przyjęcie</p>
+        <p><input type="checkbox" name="wyd"> Wydanie</p>
+
+        
+      
+
+        <h3>Sortuj po:</h3>
+            <input type="radio" name="sort" id = "sort_data" value="data_stworzenia">
+            <label for="sort_data">Data</label><br> 
+            <input type="radio" name="sort" id = "sort_operacja" value="rodzaj_operacji">
+            <label for="sort_operacja">Rodzaj operacji</label><br> 
+
+            <h3><label for="sort_type">Typ sortowania:</label></h3>
+            <select id="sort_type" name="sort_type">
+              <option value="DESC">Malejaco</option>
+              <option value="ASC">Rosnaco</option>
+            </select>
+
+        <p><button type="submit">Filtruj</button></p>
+
+    </form>
+</div>
+
+<div id = "display_items"  style="float: right; width: 60%; overflow:hidden;   padding-bottom: 50px;">
+    {% for zamowienie in data%} 
+            <div class = "display_zamowienie" style="border: 1px solid black; padding-left: 15px;">
+               
+                    <p> <b class ="zamowienie_data">ID operacji:</b>  {{ zamowienie.id_operacji}}</p>
+                    <p> Data operacji:  {{ zamowienie.data_operacji }}</p>
+                    <p> Rodzaj operacji:  {{ zamowienie.opis }}</p>
+                    <div class = "product">
+                        {% for id,opis in products %}
+                            {% if id == zamowienie.id_operacji %}
+                                <p>--{{opis}}</p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    
+                   
+            </div>
+        <div class = 'separator'></div>
+    {% endfor %}
+
+    
+
+
+</div>
+
+{% endblock content %}

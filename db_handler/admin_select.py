@@ -127,3 +127,21 @@ def productListForSearch():
     cur.close()
     con.close()
     return table_data
+
+
+def storehouse_view(id):
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    query_db = 'SELECT p.opis, ilosc FROM magazyn.magazyn_stan JOIN magazyn.produkt P USING (id_produkt) WHERE id_magazyn = {};'.format(id)
+    cur.execute(query_db)
+    result = {}
+
+    column_names = ['opis', 'ilosc']
+    table_data = cur.fetchall()   
+
+    result['Stan magazynu '+str(id)] = [column_names,table_data]
+    cur.close()
+    con.close()
+    return result
+
+

@@ -56,6 +56,7 @@ def zam_insert_product(form,id):
     old_kwota=kwota+get_kwota(id)
     query_db='UPDATE magazyn.zamowienie SET kwota = {} WHERE numer_kolejny_zamowienia = {}; '.format(old_kwota,id)
     query_db += 'INSERT INTO magazyn.zamowienie_szczegoly (numer_kolejny_zamowienia, id_produkt, ilosc,cena) VALUES ({}, {} , {} ,{});'.format(int(id),form['produkt'], form['ilosc'], form['cena'])
+  
     cur.execute(query_db)
     con.commit()
     cur.close()
@@ -90,3 +91,90 @@ def zam_del_product(form, id):
     con.commit()
     cur.close()
     con.close()
+
+
+def get_product_quantity_in_order(id):
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    insert_query = "SELECT ilosc FROM magazyn.zamowienie_szczegoly WHERE numer_kolejny_zamowienia =  \'{}\';".format(id)
+    cur.execute(insert_query)
+    con.commit()
+    if cur.rowcount !=0:
+        ilosc=cur.fetchone()[0]
+        cur.close()
+        con.close()
+        return ilosc  
+    else:
+        cur.close()
+        con.close()
+        return 0
+
+def get_product_quantity_in_magazyn(id):
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    insert_query = "SELECT ilosc FROM magazyn.magazyn_stan WHERE id_magazyn =  \'{}\';".format(id)
+    cur.execute(insert_query)
+    con.commit()
+    if cur.rowcount !=0:
+        ilosc=cur.fetchone()[0]
+        cur.close()
+        con.close()
+        return ilosc  
+    else:
+        cur.close()
+        con.close()
+        return 0
+ 
+
+
+def get_price(id):
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    insert_query = "SELECT cena FROM magazyn.zamowienie_szczegoly WHERE numer_kolejny_zamowienia =  \'{}\';".format(id)
+    cur.execute(insert_query)
+    con.commit()
+    cena= cur.fetchone()[0]
+    cur.close()
+    con.close()
+    print(cena)
+    return cena
+
+def get_id_magazyn(id):
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    insert_query = "SELECT id_magazyn FROM magazyn.zamowienie WHERE numer_kolejny_zamowienia =  \'{}\';".format(id)
+    cur.execute(insert_query)
+    con.commit()
+    id_magazyn= cur.fetchone()[0]
+    cur.close()
+    con.close()
+    print(id_magazyn)
+    return id_magazyn
+
+def zam_receipt_product(form,id,user_id):
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    cena=get_price(id)
+    kwota=int(form['ilosc'])*int(cena)
+    old_kwota=get_kwota(id)-kwota
+    id_magazyn=get_id_magazyn(id)
+
+
+
+    quantity=get_product_quantity_in_order(id)
+    quantity2=get_product_quantity_in_magazyn(id_magazyn)
+    if quantity<form['ilosc']:
+        pass
+    else:
+        query_db='UPDATE magazyn.zamowienie SET kwota = {} WHERE numer_kolejny_zamowienia = {}; '.format(old_kwota,id)
+        query_db += 'UPDATE magazyn.zamowienie_szczegoly SET ilosc = {} WHERE numer_kolejny_zamowienia = {} AND id_produkt = \'{}\';'.format( quantity-form['ilosc'],int(id),form['produkt'])
+        if quantity2:
+            query_db+="UPDATE magazyn.magazyn_stan SET ilosc =  {} WHERE id_magazyn =  {} AND id_produkt =  {};".format(quantity2+form['ilosc'],id_magazyn,form['produkt'])
+        else:
+            query_db+="INSERT INTO magazyn.magazyn_stan (id_produkt,id_magazyn,ilosc) VALUES ({}, {}, {});".format(form['produkt'],id_magazyn,form['ilosc'])
+
+        query_db+="INSERT INTO magazyn.magazyn_operacje (id_produkt,numer_kolejny_zamowienia,data_operacji, ilosc,rodzaj_operacji, id_magazyn,id_pracownik) VALUES ({},{},current_date,{}, 'prz', {},{})".format(form['produkt'],id,form['ilosc'],id_magazyn,user_id)
+        cur.execute(query_db)
+        con.commit()
+        cur.close()
+        con.close()

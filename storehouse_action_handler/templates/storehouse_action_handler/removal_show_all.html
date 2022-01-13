@@ -1,0 +1,36 @@
+{% extends "storehouse_action_handler/magazynier_panel.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load template_filters %}
+{% csrf_token %}
+
+<div id = "db_container1" style="padding-bottom: 10px; ">
+    {% for table,data in select2.items %}
+        <h1>{{table}}</h1>
+        <table style="border: 1px solid grey; padding: 30px; width: 850px;">
+            <tr>
+                {% for column_name in data|access:0 %}
+                    <td class="db_cell"><h3>{{column_name }}</h3></td>
+                {% endfor %}
+            </tr>
+            
+            {% for row in data|access:1 %}
+                <tr>
+                    {% for info in row %}
+                        <td class="db_cell">{{info}}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+</div>
+
+<div style="padding-bottom: 100px;" id = "form_container">
+    <h1>{{form_title|access:0}} : {{form_title|access:1}}</h1>
+    <form id = "form" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit">Dodaj</button>
+    </form>
+</div>
+{% endblock content %}
