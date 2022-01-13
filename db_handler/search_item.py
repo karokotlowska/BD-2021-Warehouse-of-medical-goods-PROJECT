@@ -59,9 +59,9 @@ def filter(data):
                                     
                                     
                                     WHERE z.status ~* \'{}\'
+                                    AND (kwota BETWEEN {} AND {})
                                    
-                                   
-                                    '''.format(statusQuery)
+                                    '''.format(statusQuery,kwota[0],kwota[1])
         cur.execute(postgreSQL_select_Query)
         mobile_records = cur.fetchall()
 
