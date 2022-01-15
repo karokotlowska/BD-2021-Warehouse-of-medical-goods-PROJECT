@@ -12,6 +12,16 @@ def create_data_from_fetch(mobile_records,cursor):
    
     return data
 
+def create_data_from_fetch_search(mobile_records,cursor):
+    column_names = [column[0] for column in cursor.description]
+    cursor.execute("SELECT id_magazyn, id_produkt FROM magazyn.magazyn_stan;")
+    data = [{} for _ in range(len(mobile_records))]
+    for i in range(len(mobile_records)):
+        for j in range(len(mobile_records[i])):
+            data[i][column_names[j]] = mobile_records[i][j]
+   
+    return data
+
 
 def filter(data):
     cleanedData  = {a:b for a,b in data.items()}
@@ -47,7 +57,7 @@ def filter(data):
         kwota.append(pow(10,10))
     if len(sort) >0:
         sort.append(cleanedData["sort_type"])
-        postgreSQL_select_Query = '''SELECT z.numer_kolejny_zamowienia, z.id_zamowienia, z.data_stworzenia, z.status, z.kwota FROM magazyn.zamowienie Z
+        postgreSQL_select_Query = '''SELECT z.numer_kolejny_zamowienia, z.id_zamowienia, z.data_stworzenia, z.status, z.kwota FROM magazyn.zamowienie Z 
                                     
                                     
                                     
@@ -146,4 +156,20 @@ def filter_storehouse(data):
     else:
         return_data = create_data_from_fetch(mobile_records,cur)
       
+    return return_data
+
+
+def storehouse_view_all():
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    query_db = 'SELECT id_magazyn, id_produkt, p.opis, ilosc FROM magazyn.magazyn_stan JOIN magazyn.produkt P USING (id_produkt) '.format(id)
+    cur.execute(query_db)
+
+    mobile_records = cur.fetchall()   
+    if mobile_records is None:
+        cur.close()
+        con.close()
+        return []
+    else:
+        return_data = create_data_from_fetch_search(mobile_records,cur)
     return return_data

@@ -24,8 +24,9 @@
 
             <h3><label for="sort_type">Typ sortowania:</label></h3>
             <select id="sort_type" name="sort_type">
+                <option value="ASC">Rosnaco</option>
               <option value="DESC">Malejaco</option>
-              <option value="ASC">Rosnaco</option>
+              
             </select>
 
         <p><button type="submit">Filtruj</button></p>
@@ -41,7 +42,7 @@
                     <p> Data stworzenia:  {{ zamowienie.data_stworzenia }}</p>
                     <p> Kwota:  {{ zamowienie.kwota }}</p>
                     <div class = "product">
-                        {% for id,opis in products %}
+                        {% for id,opis,ilosc in products %}
                             {% if id == zamowienie.numer_kolejny_zamowienia %}
                                 <p>--{{opis}}</p>
                             {% endif %}

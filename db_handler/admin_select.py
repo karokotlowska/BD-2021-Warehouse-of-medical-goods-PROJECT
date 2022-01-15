@@ -23,16 +23,15 @@ def get_order_column_names(cur):
         result[tables[i]] = table_data
     return result
 
-def admin_select():
+def admin_magazyn_stan_view(request):
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
-    query_db = ['SELECT * FROM magazyn.{};'.format(table) for table in tables]
-    column_names = get_column_names(cur)
+    query_db = 'SELECT * FROM magazyn.magazyn_view;'.format(request)
     result = {}
-    for i in range(len(tables)):
-        cur.execute(query_db[i])
-        table_data = cur.fetchall()
-        result[tables[i]] = [column_names[tables[i]],table_data]
+    cur.execute(query_db)
+    table_data = cur.fetchall()
+    column_names = ['id_mag','ilosc','produkt','kategoria','numer magazynu','ulica','miasto','kod pocztowy']
+    result[request] = [column_names,table_data]
     cur.close()
     con.close()
     return result
@@ -50,58 +49,122 @@ def admin_dict_select(request):
     con.close()
     return result
 
+def admin_pracownik_view(request):
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    query_db = 'SELECT * FROM magazyn.pracownik_view;'.format(request)
+    result = {}
+    cur.execute(query_db)
+    table_data = cur.fetchall()
+    column_names = ['imie','nazwisko','email','stanowisko']
+    result[request] = [column_names,table_data]
+    cur.close()
+    con.close()
+    return result
+
+
+def admin_zamowienie_view(request):
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    query_db = 'SELECT * FROM magazyn.magazyn_view;'.format(request)
+    result = {}
+    cur.execute(query_db)
+    table_data = cur.fetchall()
+    column_names = ['numer','id','data stworzenia','status','kwota', 'id_firmy']
+    result[request] = [column_names,table_data]
+    cur.close()
+    con.close()
+    return result
+
+def admin_produkty_view(request):
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    query_db = 'SELECT * FROM magazyn.produkty_view;'.format(request)
+    result = {}
+    cur.execute(query_db)
+    table_data = cur.fetchall()
+    column_names = ['opis','kategoria']
+    result[request] = [column_names,table_data]
+    cur.close()
+    con.close()
+    return result
+
+
 def productList():
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
-    query_db = 'SELECT id_produkt,opis FROM magazyn.produkt ;'
+    query_db = 'SELECT listaproduktow.id_prdukt, listaproduktow.opis FROM ListaProduktow();'
+    cur.execute(query_db)
+    mobile_records = cur.fetchall()   
+    cur.close()
+    con.close()
+
+
+    cur.close()
+    con.close()
+    return mobile_records
+
+def productListFromMagazyn(id_magazyn):
+    
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    query_db = 'SELECT ListaProduktowMagazyn.id_produkt, ListaProduktowMagazyn.opis FROM magazyn.ListaProduktowMagazyn({});'.format(id_magazyn)
     cur.execute(query_db)
     table_data = cur.fetchall()   
     cur.close()
     con.close()
+    print(table_data)
     return table_data
 
 def admin_order_view_select( id):
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
     print(id)
-    query_db = 'SELECT numer_kolejny_zamowienia, id_zamowienia, id_magazyn, data_stworzenia, status, id_firmy FROM magazyn.zamowienie WHERE numer_kolejny_zamowienia =  {};'.format(int(id))
+    query_db = 'SELECT numer_kolejny_zamowienia, id_zamowienia, id_magazyn, data_stworzenia, status, id_firmy, kwota FROM magazyn.zamowienie WHERE numer_kolejny_zamowienia =  {};'.format(int(id))
     result = {}
     cur.execute(query_db)
     table_data = cur.fetchall()
-    column_names = ['numer_kolejny_zamowienia','id_zamowienia', 'id_magazyn', 'data_stworzenia', 'status', 'id_firmy']
+    column_names = ['num.kolej.','id_zam.', 'id_mag.', 'data stworz.', 'status', 'id_firmy','kwota']
     result['ZAMÓWIENIE'] = [column_names,table_data]
     cur.close()
     con.close()
     return result
 
 def order_details(id):
-    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
-    cur = con.cursor()
-    print(id)
-    query_db = 'SELECT  p.opis, ilosc, cena FROM magazyn.zamowienie_szczegoly JOIN magazyn.produkt P USING (id_produkt) JOIN magazyn.zamowienie Z USING (numer_kolejny_zamowienia) WHERE numer_kolejny_zamowienia = \'{}\';'.format(int(id))
-    result = {}
-    cur.execute(query_db)
-    table_data = cur.fetchall()
-    column_names = [ 'produkt', 'ilosc', 'cena',]
-    #print(column_names)
-    result['PRODUKTY W ZAMÓWIENIU:'] = [column_names,table_data]
-    cur.close()
-    con.close()
-    return result
+    try:
+        con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+        cur = con.cursor()
+        print(id)
+        print(id)
+        print(id)
+        print(id)
+        query_db = 'SELECT  SzczegolyZamowienia.opis, SzczegolyZamowienia.ilosc, SzczegolyZamowienia.cena, SzczegolyZamowienia.kwota FROM magazyn.SzczegolyZamowienia({});'.format(int(id))
+        result = {}
+        cur.execute(query_db)
+        table_data = cur.fetchall()
+        column_names = [ 'produkt', 'ilosc', 'cena','kwota']
+        print(table_data)
+        result['PRODUKTY W ZAMÓWIENIU:'] = [column_names,table_data]
+        cur.close()
+        con.close()
+        return result
+    except (Exception, psycopg2.Error) as error:
+        print ("Error while fetching data from PostgreSQL", error)
+        return 'error'
 
 def edit_order_details(id):
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
-    print(id)
-    query_db = 'SELECT z.id_zamowienia, z.numer_kolejny_zamowienia, z.status,  z.id_firmy, zs.ilosc, zs.cena, p.opis FROM magazyn.zamowienie z LEFT JOIN magazyn.zamowienie_szczegoly zs ON z.numer_kolejny_zamowienia = zs.numer_kolejny_zamowienia JOIN magazyn.produkt P USING(id_produkt) WHERE z.id_zamowienia = \'{}\';'.format(id)
+    query_db = 'SELECT z.id_zamowienia, z.numer_kolejny_zamowienia, z.status,  z.id_firmy, zs.ilosc, zs.cena, p.opis, z.kwota FROM magazyn.zamowienie z LEFT JOIN magazyn.zamowienie_szczegoly zs ON z.numer_kolejny_zamowienia = zs.numer_kolejny_zamowienia JOIN magazyn.produkt P USING(id_produkt) WHERE z.id_zamowienia = \'{}\';'.format(id.upper())
     result = {}
     cur.execute(query_db)
     table_data = cur.fetchall()
-    column_names = ['id_zam.','num.kolej.zam.', 'status','id_firmy', 'ilosc', 'cena','produkt']
+    column_names = ['id_zam.','num.kolej.zam.', 'status','id_firmy', 'ilosc', 'cena','produkt','kwota']
     #print(column_names)
     result['SZCZEGÓŁY ZAMÓWIENIA:'] = [column_names,table_data]
     cur.close()
     con.close()
+    print(table_data)
     return result
 
 def admin_profile_select(request,id):
@@ -121,12 +184,13 @@ def admin_profile_select(request,id):
 def productListForSearch():
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
-    query_db = 'SELECT z.numer_kolejny_zamowienia, p.opis FROM magazyn.zamowienie_szczegoly Z JOIN magazyn.produkt P USING (id_produkt);'
+    query_db = 'SELECT z.numer_kolejny_zamowienia, p.opis, ms.ilosc FROM magazyn.zamowienie_szczegoly Z LEFT JOIN magazyn.produkt P USING (id_produkt) LEFT JOIN magazyn.magazyn_stan MS USING (id_produkt);'
     cur.execute(query_db)
     table_data = cur.fetchall()   
     cur.close()
     con.close()
     return table_data
+
 
 
 def storehouse_view(id):
@@ -143,5 +207,7 @@ def storehouse_view(id):
     cur.close()
     con.close()
     return result
+
+
 
 

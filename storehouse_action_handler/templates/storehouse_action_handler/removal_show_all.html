@@ -25,12 +25,8 @@
     {% endfor %}
 </div>
 
-<div style="padding-bottom: 100px;" id = "form_container">
-    <h1>{{form_title|access:0}} : {{form_title|access:1}}</h1>
-    <form id = "form" method="POST">
-        {% csrf_token %}
-        {{ form|crispy }}
-        <button type="submit">Dodaj</button>
-    </form>
-</div>
+<a style="padding-right: 10px;" href='/remove_product/?id={{numer_kolejny_zamowienia}}'>Wydaj wybrane produkty</a>
+
+
+
 {% endblock content %}

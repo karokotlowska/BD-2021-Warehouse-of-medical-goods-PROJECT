@@ -6,7 +6,7 @@
 <div id = "db_container" style="padding-bottom: 10px; float:left;">
     {% for table,data in select.items %}
         <h1>{{table}}</h1>
-        <table style="border: 1px solid grey; padding: 30px; width: 800px; ">
+        <table style="border: 1px solid grey; padding: 30px; width: 800px;">
             <tr>
                 {% for column_name in data|access:0 %}
                     <td class="db_cell"><h3>{{column_name }}</h3></td>
@@ -27,7 +27,7 @@
 <div id = "db_container1" style="padding-bottom: 10px; ">
     {% for table,data in select2.items %}
         <h1>{{table}}</h1>
-        <table style="border: 1px solid grey; padding: 30px; width: 800px;">
+        <table style="border: 1px solid grey; padding: 30px; width: 850px;">
             <tr>
                 {% for column_name in data|access:0 %}
                     <td class="db_cell"><h3>{{column_name }}</h3></td>
@@ -43,15 +43,15 @@
             {% endfor %}
         </table>
     {% endfor %}
-
 </div>
-{% if numer_kolejny_zamowienia %}
-            <p>Magazyn materialow medycznych - {{numer_kolejny_zamowienia}}</p>
-{% endif %}
 
-<a style="padding-right: 10px;" href='/add_product/?id={{numer_kolejny_zamowienia}}'>Dodaj produkty</a>
-<a style="padding-right: 10px;" href='/change_order_status/?id={{numer_kolejny_zamowienia}}'>Zmień status</a>
-<a style="padding-right: 10px;" href='/add_payment/?id={{numer_kolejny_zamowienia}}'>Dodaj płatność</a>
+<div style="padding-bottom: 100px;" id = "form_container">
+    <h1>{{form_title|access:0}} : {{form_title|access:1}}</h1>
+    <form id = "form" method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button type="submit">Zmień</button>
+    </form>
+</div>
 
-
-{% endblock %}
+{% endblock content %}

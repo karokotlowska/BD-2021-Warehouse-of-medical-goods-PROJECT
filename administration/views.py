@@ -91,9 +91,20 @@ def delete_form(request, resource):
         
 
 def select_form(request, resource):
-    if resource == 'all':
-        select=admin_select.admin_select()
+    if resource == 'magazyn':
+        select=admin_select.admin_magazyn_stan_view(resource)
         return render(request,'administration/show_forms.html',{'select':select})
+    if resource == 'pracownik':
+        select=admin_select.admin_pracownik_view(resource)
+        return render(request,'administration/show_forms.html',{'select':select})
+    if resource == 'produkty':
+        select=admin_select.admin_produkty_view(resource)
+        return render(request,'administration/show_forms.html',{'select':select})
+    
+    if resource =='pokaz_zamowienia':
+        select=admin_select.admin_zamowienie_view(resource)
+        return render(request,'administration/show_forms.html',{'select':select})
+     
     else:
         select=admin_select.admin_dict_select(resource)
         return render(request,'administration/show_forms.html',{'select':select})

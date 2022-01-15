@@ -52,6 +52,9 @@ urlpatterns = [
     path('searchoperations/', storehouse_action_handler_views.searchoperations, name='searchoperations'),
 
     path('add_product_to_storehoue/', storehouse_action_handler_views.add_product, name='add_product_to_storehoue'),
+     path('remove_product/', storehouse_action_handler_views.remove_product, name='remove_product'),
+
+     path('add_payment/', storehouse_views.add_payment, name='add_payment'),
 
 
 
