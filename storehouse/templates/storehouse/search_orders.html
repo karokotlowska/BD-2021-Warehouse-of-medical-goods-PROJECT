@@ -47,7 +47,7 @@
                     <p> <b>Produkty:</b></p>
 
                     <div class = "product">
-                        {% for id,opis,ilosc in products %}
+                        {% for id,opis in products %}
                             {% if id == zamowienie.numer_kolejny_zamowienia %}
                                 <p>--{{opis}}</p>
                             {% endif %}

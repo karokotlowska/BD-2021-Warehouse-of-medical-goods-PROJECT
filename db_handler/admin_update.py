@@ -31,11 +31,3 @@ def update_weryfikacja(form):
     cur.close()
     con.close()
 
-'''def update_zamowienie(form):
-    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
-    cur = con.cursor()
-    update_query = "UPDATE magazyn.zamowienie_szeczgoly SET numer_kolejny_zamowienia =\'{}\', id_produkt= \'{}\', kwota = \'{}\', WHERE id_pracownik = {} ;".format(form['login'], form['id_pracownik'])
-    cur.execute(update_query)
-    con.commit()
-    cur.close()
-    con.close()'''

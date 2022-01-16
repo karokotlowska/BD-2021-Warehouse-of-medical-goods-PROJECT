@@ -7,13 +7,21 @@ def zam_create_order(form,id):
     try:
         con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
         cur = con.cursor()
-        insert_query = "INSERT INTO magazyn.zamowienie (numer_kolejny_zamowienia, id_zamowienia, id_magazyn,data_stworzenia, status, id_pracownik, id_firmy) VALUES(DEFAULT, UPPER(\'{}\'),{}, current_date, 'aktywne',{}, \'{}\') RETURNING numer_kolejny_zamowienia;".format(form['id_zamowienia'],form['id_magazyn'],id,form['company'], )
+        insert_query ="INSERT INTO magazyn.zamowienie (numer_kolejny_zamowienia, id_zamowienia, id_magazyn,data_stworzenia, status, id_pracownik, id_firmy) VALUES(DEFAULT, UPPER(\'{}\'),{}, current_date, 'aktywne',{}, \'{}\') RETURNING numer_kolejny_zamowienia;".format(form['id_zamowienia'],form['id_magazyn'],id,form['company'], )
         cur.execute(insert_query)
         con.commit()
-        id= cur.fetchone()[0]
+        id2= cur.fetchone()[0]
         cur.close()
         con.close()
-        return id
+        print("----+++")
+        con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+        cur = con.cursor()
+        insert_query="INSERT INTO magazyn.platnosc (numer_kolejny_zamowienia, status, sposob, kwota_platnosci, data_zrealizowania) VALUES ({},\'{}\',\'{}\',{}, current_date ); ".format(id2,'nie wybrano', 'nie wybrano',0.0)
+        cur.execute(insert_query)
+        con.commit()
+        cur.close()
+        con.close()
+        return id2
     except (Exception, psycopg2.Error) as error:
         print ("Error while fetching data from PostgreSQL", error)
         return 'error'
@@ -65,8 +73,6 @@ def zam_insert_product(form,id):
             con.close()
             raise Exception("Ten produkt już dodano")
             
-            #ilosc=get_product_quantity_in_zamowienie(id,form['produkt'])
-            #query_db += 'UPDATE magazyn.zamowienie_szczegoly SET ilosc ={} WHERE numer_kolejny_zamowienia = {} AND id_produkt = {};'.format(form['ilosc'],id,form['produkt'])
         else:
             query_db += 'INSERT INTO magazyn.zamowienie_szczegoly (numer_kolejny_zamowienia, id_produkt, ilosc,cena) VALUES ({}, {} , {} ,{});'.format(int(id),form['produkt'], form['ilosc'], form['cena'])
     
@@ -259,7 +265,7 @@ def zam_add_payment(form,id):
         ''' if check==0:'''
         con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
         cur = con.cursor()
-        insert_query = "INSERT INTO magazyn.platnosc (numer_kolejny_zamowienia, status, sposob, data_zrealizowania, kwota_platnosci) VALUES ({},\'{}\',\'{}\', current_date,{});".format(id,form['status'],form['sposob'], form['kwota'])
+        insert_query = "UPDATE magazyn.platnosc SET numer_kolejny_zamowienia = {}, status = \'{}\', sposob = \'{}\', data_zrealizowania = current_date, kwota_platnosci = {} ;".format(id,form['status'],form['sposob'], form['kwota'])
         cur.execute(insert_query)
         con.commit()
         cur.close()

@@ -145,7 +145,7 @@ def edit_order_view(request, form_data):
 
 
 def render_search_site(request,data):
-    products=admin_select.productListForSearch()     #wszytskie produkty
+    products=admin_select.productListForSearch2()     #wszytskie produkty
     print(products)
     print("kkk")
     filters_min_max_values = get_min_max_values.get_min_max_values()
