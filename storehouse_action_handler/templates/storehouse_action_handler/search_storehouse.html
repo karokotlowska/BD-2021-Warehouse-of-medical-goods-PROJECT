@@ -20,7 +20,7 @@
 
             <h3><label for="sort_type">Typ sortowania:</label></h3>
             <select id="sort_type" name="sort_type">
-                <option value="ASC">Rosnaco</option>
+            <option value="ASC">Rosnaco</option>
               <option value="DESC">Malejaco</option>
               
             </select>
@@ -34,20 +34,16 @@
     {% for zamowienie in data%} 
             <div class = "display_zamowienie" style="border: 1px solid black; padding-left: 15px;">
                
-                    <p> <b class ="zamowienie_data">ID operacji:</b>  {{ zamowienie.id_operacji}}</p>
-                    <p> Data operacji:  {{ zamowienie.data_operacji }}</p>
-                    {% if zamowienie.rodzaj_operacji == 'prz' %}
-                        <p> Id magazynu: {{zamowienie.id_magazyn}}</p>
-                    {% endif %}
+                <p> <b class ="zamowienie_data">ID operacji:</b>  {{ zamowienie.id_operacji}}</p>
+                <p> Data operacji:  {{ zamowienie.data_operacji }}</p>
+                {% if zamowienie.rodzaj_operacji == 'prz' %}
+                    <p> Id magazynu: {{zamowienie.id_magazyn}}</p>
+                {% endif %}
 
-                    <p> Rodzaj operacji:  {{ zamowienie.opis }}</p>
-                    <div class = "product">
-                        {% for id,opis in products %}
-                            {% if id == zamowienie.id_operacji %}
-                                <p>--{{opis}}</p>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
+                <p> Rodzaj operacji:  {{ zamowienie.opis }}</p>
+                <p> Kategoria produktu:  {{ zamowienie.nazwa }}</p>
+                <p> ID produktu:  {{zamowienie.id_produkt}}</p>
+                   
                     
                    
             </div>

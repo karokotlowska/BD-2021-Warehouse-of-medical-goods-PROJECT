@@ -129,7 +129,7 @@ def filter_storehouse(data):
     
     if len(sort) >0:
         sort.append(cleanedData["sort_type"])
-        postgreSQL_select_Query = '''SELECT z.rodzaj_operacji, z.numer_kolejny_zamowienia, z.id_operacji, z.data_operacji, z.id_magazyn, mo.opis FROM magazyn.magazyn_operacje Z JOIN magazyn.rodzaj_operacji MO USING (rodzaj_operacji)
+        postgreSQL_select_Query = '''SELECT z.rodzaj_operacji, z.numer_kolejny_zamowienia, p.id_produkt, k.nazwa, z.id_operacji, z.data_operacji, z.id_magazyn, mo.opis FROM magazyn.magazyn_operacje Z JOIN magazyn.rodzaj_operacji MO USING (rodzaj_operacji) JOIN magazyn.produkt P USING (id_produkt) JOIN magazyn.kategoria K USING(id_kategoria)
                                     
                                     
                                     
@@ -141,11 +141,11 @@ def filter_storehouse(data):
         mobile_records = cur.fetchall()
    
     else:
-        postgreSQL_select_Query = '''SELECT z.rodzaj_operacji, z.numer_kolejny_zamowienia, z.id_operacji, z.data_operacji,  z.id_magazyn, mo.opis FROM magazyn.magazyn_operacje Z JOIN magazyn.rodzaj_operacji MO USING (rodzaj_operacji)
+        postgreSQL_select_Query = '''SELECT z.rodzaj_operacji, z.numer_kolejny_zamowienia,p.id_produkt, k.nazwa, z.id_operacji, z.data_operacji,  z.id_magazyn, mo.opis FROM magazyn.magazyn_operacje Z JOIN magazyn.rodzaj_operacji MO USING (rodzaj_operacji) JOIN magazyn.produkt P USING (id_produkt) JOIN magazyn.kategoria K USING(id_kategoria)
                                     
                                     
                                     WHERE z.rodzaj_operacji ~* \'{}\'
-                                   
+                                    ORDER BY z.id_operacji ASC
                                     '''.format(statusQuery)
         cur.execute(postgreSQL_select_Query)
         mobile_records = cur.fetchall()

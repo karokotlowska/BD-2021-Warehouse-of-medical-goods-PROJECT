@@ -64,15 +64,9 @@ def add_product(request):
                     print("-----------------------")
                     error=zam_order.zam_receipt_product(form.cleaned_data,numer_kolejny_zamowienia,user_id)
                     select=admin_select.admin_order_view_select(int(numer_kolejny_zamowienia))
-                    #if error =='error':
 
-                     #   messages.error(request, 'Ten pro.')
-
-                    #else:
-                      #  messages.success(request, 'Przyjęto produkt.')
-            print(select)
-            print("--------")
-         
+                    messages.success(request, 'Przyjęto produkt.')
+       
 
             return render(request,'storehouse_action_handler/add_product_to_storehouse.html',{'form':form,'form_title':['PRZYMIJ PRODUKTY NA MAGAZYN',""],'select':select,'select2':select2, 'numer_kolejny_zamowienia':numer_kolejny_zamowienia})
 

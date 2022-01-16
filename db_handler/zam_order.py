@@ -60,7 +60,7 @@ def zam_insert_product(form,id):
         product_exists_in_zamowienie=get_product_quantity_in_zamowienie(id,form['produkt'])
         query_db=''
 
-        if product_exists_in_zamowienie:
+        if product_exists_in_zamowienie!=0:
             cur.close()
             con.close()
             raise Exception("Ten produkt już dodano")
@@ -216,13 +216,10 @@ def zam_receipt_product(form,numer_kolejny_zamowienia,user_id):
     cur = con.cursor()
     id_magazyn=get_id_magazyn(numer_kolejny_zamowienia)
     product_exists_in_magazyn=get_product_quantity_in_magazyn(id_magazyn,form['produkt'])
-    print("----dddddddddddddd-")
-    print(product_exists_in_magazyn)
     try:
         if product_exists_in_magazyn!=None:
             query_db="UPDATE magazyn.magazyn_stan SET ilosc =  {} WHERE id_magazyn =  {} AND id_produkt =  {};".format(product_exists_in_magazyn+form['ilosc'],id_magazyn,form['produkt'])
             query_db+="INSERT INTO magazyn.magazyn_operacje (id_produkt,numer_kolejny_zamowienia, ilosc,rodzaj_operacji, id_magazyn,id_pracownik) VALUES ({},{},{}, 'prz', {},{}); ".format(form['produkt'],numer_kolejny_zamowienia,form['ilosc'],id_magazyn,user_id)
-            print("----dddddddddddddd-")
             cur.execute(query_db)
             con.commit()
             cur.close()
@@ -230,7 +227,6 @@ def zam_receipt_product(form,numer_kolejny_zamowienia,user_id):
         else:
             query_db="INSERT INTO magazyn.magazyn_stan (id_produkt,id_magazyn,ilosc) VALUES ({}, {}, {});".format(form['produkt'],id_magazyn,form['ilosc'])
             query_db+="INSERT INTO magazyn.magazyn_operacje (id_produkt,numer_kolejny_zamowienia, ilosc,rodzaj_operacji, id_magazyn,id_pracownik) VALUES ({},{},{}, 'prz', {},{}); ".format(form['produkt'],numer_kolejny_zamowienia,form['ilosc'],id_magazyn,user_id)
-
             cur.execute(query_db)
             con.commit()
             cur.close()

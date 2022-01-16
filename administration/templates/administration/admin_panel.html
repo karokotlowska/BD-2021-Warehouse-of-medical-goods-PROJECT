@@ -16,9 +16,9 @@
 
 <body>
   
-        <div id = 'navbar' class='sidenav' style="width: 300px;">
+        <div id = 'navbar' class='sidenav' style="width: 300px; padding-bottom: 100px;">
             <a href="{% url 'profile' %}"> Profil </a>
-            <a href="{% url 'logout' %}"> Wyloguj się</a>
+            
             <a href="{% url 'operations' %}">Operacje</a>
             
             
@@ -26,6 +26,9 @@
             <p style="color: grey;">INSERT:</p>
              <a href="/manage/?method=insert&resource=pracownik_stanowisko">dodaj pracownik_stanowisko</a> 
              <a href="/manage/?method=insert&resource=pracownik">dodaj pracownika</a> 
+             <a href="/manage/?method=insert&resource=produkt">dodaj produkt</a> 
+             <a href="/manage/?method=insert&resource=lokalizacja_magazynu">dodaj lokalizacje magazynu</a> 
+
              <p style="color: grey;">SELECT:</p>
              <a href="/manage/?method=select&resource=pracownik">pokaż pracowników</a> 
              <a href="/manage/?method=select&resource=pokaz_zamowienia">pokaż zamowienia</a> 
@@ -37,10 +40,13 @@
              <a href="/manage/?method=update&resource=pracownik_stanowisko">zmień pracownik_stanowisko</a> 
              <a href="/manage/?method=update&resource=pracownik">zmień pracownik</a> 
              <a href="/manage/?method=update&resource=weryfikacja">zmień weryfikacja</a> 
+             <a href="/manage/?method=update&resource=lokalizacja_magazynu">zmień lokalizacje magazynu</a> 
+
              <p style="color: grey;">DELETE:</p>
-             <a href="/manage/?method=delete&resource=pracownik_stanowisko">usuń pracownik_stanowisko</a> 
              <a href="/manage/?method=delete&resource=pracownik">usuń pracownik</a> 
              <a href="/manage/?method=delete&resource=weryfikacja">usuń weryfikacja</a> 
+             <a href="/manage/?method=delete&resource=produkt" style="padding-bottom: 50px;">usuń produkt</a> 
+             <a href="{% url 'logout' %}"  style="padding-bottom: 100px;"> Wyloguj się</a>
         </div>
    
         <main class='main' style="padding-left: 50px;">
