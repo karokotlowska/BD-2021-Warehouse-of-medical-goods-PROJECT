@@ -236,12 +236,42 @@ def zam_receipt_product(form,numer_kolejny_zamowienia,user_id):
         return 'error'
         
 
-def zam_add_payment(form,id):
+def check_if_platnosc_exists(id):
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
-    insert_query = "INSERT INTO magazyn.platnosc (numer_kolejny_zamowienia, status, sposob, data_zrealizowania) VALUES ({},\'{}\',\'{}\', current_date);".format(id,form['status'],form['sposob'])
+    insert_query = "SELECT * FROM magazyn.platnosc WHERE numer_kolejny_zamowienia = {};".format(id)
     cur.execute(insert_query)
     con.commit()
-    cur.close()
-    con.close()
-  
+    if cur.rowcount !=0:
+        ilosc=cur.fetchone()[0]
+        cur.close()
+        con.close()
+        return ilosc  
+    else:
+        cur.close()
+        con.close()
+        return 0
+
+
+def zam_add_payment(form,id):
+    '''check=check_if_platnosc_exists(id)'''
+    try:
+        ''' if check==0:'''
+        con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+        cur = con.cursor()
+        insert_query = "INSERT INTO magazyn.platnosc (numer_kolejny_zamowienia, status, sposob, data_zrealizowania, kwota_platnosci) VALUES ({},\'{}\',\'{}\', current_date,{});".format(id,form['status'],form['sposob'], form['kwota'])
+        cur.execute(insert_query)
+        con.commit()
+        cur.close()
+        con.close()
+        '''else:
+            con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+            cur = con.cursor()
+            insert_query = "UPDATE magazyn.platnosc SET numer_kolejny_zamowienia = {}, status = \'{}\', sposob = \'{}\', data_zrealizowania = current_date ; ".format(id,form['status'],form['sposob'])
+            cur.execute(insert_query)
+            con.commit()
+            cur.close()
+            con.close()'''
+    except (Exception, psycopg2.Error) as error:
+        print ("Error while fetching data from PostgreSQL", error)
+        return 'error'

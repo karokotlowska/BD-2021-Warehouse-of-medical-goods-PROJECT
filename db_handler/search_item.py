@@ -57,7 +57,7 @@ def filter(data):
         kwota.append(pow(10,10))
     if len(sort) >0:
         sort.append(cleanedData["sort_type"])
-        postgreSQL_select_Query = '''SELECT z.numer_kolejny_zamowienia, z.id_zamowienia, z.data_stworzenia, z.status, z.kwota FROM magazyn.zamowienie Z 
+        postgreSQL_select_Query = '''SELECT p.status, p.sposob, z.numer_kolejny_zamowienia, z.id_zamowienia, z.data_stworzenia, z.status, z.kwota FROM magazyn.zamowienie Z JOIN magazyn.platnosc P USING(numer_kolejny_zamowienia)
                                     
                                     
                                     
@@ -70,7 +70,7 @@ def filter(data):
         mobile_records = cur.fetchall()
    
     else:
-        postgreSQL_select_Query = '''SELECT z.numer_kolejny_zamowienia, z.id_zamowienia, z.data_stworzenia, z.status, z.kwota FROM magazyn.zamowienie Z
+        postgreSQL_select_Query = '''SELECT p.status, p.sposob, z.numer_kolejny_zamowienia, z.id_zamowienia, z.data_stworzenia, z.status, z.kwota FROM magazyn.zamowienie Z JOIN magazyn.platnosc P USING(numer_kolejny_zamowienia)
                                     
                                     
                                     WHERE z.status ~* \'{}\'

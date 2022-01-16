@@ -128,12 +128,11 @@ def edit_order_view(request, form_data):
     id_zamowienia=form_data['id_zamowienia']
     id_zamowienia=id_zamowienia.upper()
     id=zam_order.get_order_id(id_zamowienia)
-    select=admin_select.admin_order_view_select(int(id))
-    select2=admin_select.order_details(id)
+    
 
     if id!='error':
-        #select=zam_order.storehouse_order_select(resource)
-        #select2=admin_select.edit_order_details(id_zamowienia)
+        select=admin_select.admin_order_view_select(int(id))
+        select2=admin_select.order_details(id)
         form=SelectProductToPurchase(request.GET)
         if form.is_valid():
                 if request.method=='POST':

@@ -60,8 +60,6 @@ def add_product(request):
     select2=admin_select.order_details(numer_kolejny_zamowienia)
     if form.is_valid():
             if request.method=='POST':
-                    print('drugipost')
-                    print("-----------------------")
                     error=zam_order.zam_receipt_product(form.cleaned_data,numer_kolejny_zamowienia,user_id)
                     select=admin_select.admin_order_view_select(int(numer_kolejny_zamowienia))
 
@@ -92,11 +90,7 @@ def removal(request):
 
 def search_order_view_remove(request, form_data):
         user_id=request.session['user_id']
-     
         select2=admin_select.storehouse_view(form_data['magazyn'])
-     
-
-        #form=SelectProductToPurchase2(form_data['magazyn'],request.GET)
         if True:
             if request.method=='POST':
                     print('drugipostDZINWY')
@@ -109,7 +103,6 @@ def remove_product(request):
     select2=admin_select.storehouse_view(id_magazynu)
     id_prac=request.session['user_id']
 
-    #form=SelectProductToPurchase()
     list_of_choices=admin_select.productListFromMagazyn(id_magazynu)
     form=SelectProductToPurchase2(request.POST,my_choices=list_of_choices)
     

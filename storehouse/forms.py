@@ -32,6 +32,7 @@ class OrderStatus(forms.Form):
 class Payment(forms.Form):
     #CHOICES=(['przelew','przelew'])
     sposob = forms.CharField(required=False,label = 'sposob')
+    kwota = forms.DecimalField(required=False,label = 'kwota')
 
-    CHOICES=(['oczekiwanie','oczekiwanie'],['zrealizowano','zrealizowano'])
+    CHOICES=(['zlecono','zlecono'],['zrealizowano','zrealizowano'])
     status = forms.ChoiceField(required=False,label = 'status', widget=forms.Select, choices=CHOICES)
