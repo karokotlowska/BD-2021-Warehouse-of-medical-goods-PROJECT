@@ -1,0 +1,27 @@
+{% extends "storehouse/storehouse_panel.html" %}
+{% block content %}
+{% load crispy_forms_tags %}
+{% load template_filters %}
+{% csrf_token %}
+<div id = "db_container" style="padding-bottom: 10px; float:left;">
+    {% for table,data in select.items %}
+        <h1>{{table}}</h1>
+        <table style="border: 1px solid grey; padding: 30px; width: 800px; ">
+            <tr>
+                {% for column_name in data|access:0 %}
+                    <td class="db_cell"><h3>{{column_name }}</h3></td>
+                {% endfor %}
+            </tr>
+            
+            {% for row in data|access:1 %}
+                <tr>
+                    {% for info in row %}
+                        <td class="db_cell">{{info}}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+
+</div>
+{% endblock %}

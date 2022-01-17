@@ -1,3 +1,4 @@
+from email import message
 from django.shortcuts import render,redirect
 
 
@@ -14,11 +15,11 @@ from administration.forms import InsertPracownik_stanowisko
 from administration.forms import InsertPracownik
 
 from administration.forms import UpdateWeryfikacja
-from administration.forms import UpdatePracownik
+from administration.forms import UpdatePracownik, UpdateLokalizacja
 from administration.forms import UpdatePracownik_stanowisko
 
-from administration.forms import DeletePracownik_stanowisko
-from administration.forms import DeletePracownik
+from administration.forms import DeletePracownik_stanowisko, DeleteProduct
+from administration.forms import DeletePracownik, InsertProdukt, InsertKategoria, InsertLokalizacja
 
 from django.http import HttpResponse
 
@@ -55,16 +56,54 @@ def insert_form(request,resource):
         if request.method == 'POST':
             form = InsertPracownik(request.POST)
             if form.is_valid():
-                admin_insert.insert_pracownik(form.cleaned_data)
-                return redirect('forms')
+                er=admin_insert.insert_pracownik(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd dodawania.')
+                else:
+                    messages.success(request, 'Dodano.')
+                #return redirect('forms')
     elif resource == 'pracownik_stanowisko':
         form = InsertPracownik_stanowisko
         if request.method == 'POST':
             form = InsertPracownik_stanowisko(request.POST)
             if form.is_valid():
-                admin_insert.insert_pracownik_stanowisko(form.cleaned_data)
-                return redirect('forms')
-    
+                er=admin_insert.insert_pracownik_stanowisko(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Takie stanowisko już istnieje.')
+                else:
+                    messages.success(request, 'Dodano stanowisko.')
+
+    elif resource == 'produkt':
+        form = InsertProdukt
+        if request.method == 'POST':
+            form = InsertProdukt(request.POST)
+            if form.is_valid():
+                er=admin_insert.insert_produkt(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błędna kategoria produktu.')
+                else:
+                    messages.success(request, 'Dodano produkt.')
+    elif resource =='lokalizacja_magazynu':
+        form = InsertLokalizacja
+        if request.method == 'POST':
+            form = InsertLokalizacja(request.POST)
+            if form.is_valid():
+                er=admin_insert.insert_lokalizacja(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd dodawania.')
+                else:
+                    messages.success(request, 'Dodano lokalizację.')
+
+    elif resource =='kategoria':
+        form = InsertKategoria
+        if request.method == 'POST':
+            form = InsertKategoria(request.POST)
+            if form.is_valid():
+                er=admin_insert.insert_kategoria(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd dodawania.')
+                else:
+                    messages.success(request, 'Dodano kategorię.')
     else:
         return redirect('home')
     return render(request, 'administration/forms.html', {'form':form,'form_title':['insert',resource]})
@@ -76,15 +115,31 @@ def delete_form(request, resource):
         if request.method == 'POST':
             form = DeletePracownik_stanowisko(request.POST)
             if form.is_valid():
-                admin_delete.delete_pracownik_stanowisko(form.cleaned_data)
-                return redirect('admin_panel')
+                er=admin_delete.delete_pracownik_stanowisko(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd usuwania.')
+                else:
+                    messages.success(request, 'usunięto.')
     elif resource=='pracownik':
         form = DeletePracownik
         if request.method == 'POST':
             form = DeletePracownik(request.POST)
             if form.is_valid():
-                admin_delete.delete_pracownik(form.cleaned_data)
-                return redirect('admin_panel')
+                er=admin_delete.delete_pracownik(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd usuwania.')
+                else:
+                    messages.success(request, 'usunięto.')
+    elif resource=='produkt':
+        form = DeleteProduct
+        if request.method == 'POST':
+            form = DeleteProduct(request.POST)
+            if form.is_valid():
+                er=admin_delete.delete_produkt(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd usuwania.')
+                else:
+                    messages.success(request, 'usunięto.')
     else:
         return redirect('home')
     return render(request, 'administration/forms.html', {'form':form,'form_title':['delete',resource]})
@@ -103,6 +158,7 @@ def select_form(request, resource):
     
     if resource =='pokaz_zamowienia':
         select=admin_select.admin_zamowienie_view(resource)
+        print("11")
         return render(request,'administration/show_forms.html',{'select':select})
      
     else:
@@ -115,22 +171,41 @@ def update_form(request, resource):
         if request.method == 'POST':
             form = UpdateWeryfikacja(request.POST)
             if form.is_valid():
-                admin_update.update_weryfikacja(form.cleaned_data)
-                return redirect('admin_panel')
+                er=admin_update.update_weryfikacja(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd wprowadzania zmian.')
+                else:
+                    messages.success(request, 'Zmieniono.')
     elif resource=='pracownik':
         form = UpdatePracownik
         if request.method == 'POST':
             form = UpdatePracownik(request.POST)
             if form.is_valid():
-                admin_update.update_pracownik(form.cleaned_data)
-                return redirect('admin_panel')
+                er=admin_update.update_pracownik(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd wprowadzania zmian.')
+                else:
+                    messages.success(request, 'Zmieniono.')
     elif resource=='pracownik_stanowisko':
         form = UpdatePracownik_stanowisko
         if request.method == 'POST':
             form = UpdatePracownik_stanowisko(request.POST)
             if form.is_valid():
-                admin_update.update_pracownik_stanowisko(form.cleaned_data)
-                return redirect('admin_panel')
+                er=admin_update.update_pracownik_stanowisko(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd wprowadzania zmian.')
+                else:
+                    messages.success(request, 'Zmieniono.')
+    elif resource=='lokalizacja_magazynu':
+        form = UpdateLokalizacja
+        if request.method == 'POST':
+            form = UpdateLokalizacja(request.POST)
+            if form.is_valid():
+                er=admin_update.update_lokalizacja(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd wprowadzania zmian.')
+                else:
+                    messages.success(request, 'Zmieniono.')
     else:
         return redirect('home')
     return render(request, 'administration/forms.html', {'form':form,'form_title':['update',resource]})

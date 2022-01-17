@@ -29,6 +29,7 @@
         <a href="{% url 'receipt' %}">Przyjmij zamówienie</b</a>
         <a href="{% url 'removal' %}">Wydaj produkty</b</a>
         <a href="{% url 'searchoperations' %}">Historia operacji</b</a>
+
         <a href="{% url 'logout' %}"> Wyloguj się</a>
     </div>
     {% endif %}
@@ -40,6 +41,8 @@
                 <a href="{% url 'createorder' %}">Utwórz zamówienie</a>
                 <a href="{% url 'editorder' %}">Edytuj zamówienie</a>
                 <a href="{% url 'searchorders' %}">Przeglądaj zamówienia</a>
+                <a href="{% url 'operationview' %}">Przegląd</b</a>
+
                 <a href="{% url 'logout' %}"> Wyloguj się</a>
     </div>
     {% endif %}

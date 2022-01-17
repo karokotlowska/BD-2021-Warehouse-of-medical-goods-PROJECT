@@ -55,6 +55,8 @@ urlpatterns = [
      path('remove_product/', storehouse_action_handler_views.remove_product, name='remove_product'),
 
      path('add_payment/', storehouse_views.add_payment, name='add_payment'),
+     
+     path('operationview/', storehouse_views.operationview, name='operationview'),
 
 
 

@@ -169,7 +169,14 @@ def storehouse_view_order(request):
                 return render(request, 'storehouse/order.html', {'form':form,'form_title':['select','produkt']})     
     else:
         return HttpResponse('Brak dostępu', status=401)
-    return render(request, 'storehouse/order.html', {'form':form,'form_title':['select','produkt']})     
+    return render(request, 'storehouse/order.html', {'form':form,'form_title':['select','produkt']}) 
+
+
+def operationview(request):
+    select=admin_select.get_orders()
+
+    return render(request, 'storehouse/view.html', {'select':select}) 
+   
 
 
     

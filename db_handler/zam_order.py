@@ -265,7 +265,7 @@ def zam_add_payment(form,id):
         ''' if check==0:'''
         con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
         cur = con.cursor()
-        insert_query = "UPDATE magazyn.platnosc SET numer_kolejny_zamowienia = {}, status = \'{}\', sposob = \'{}\', data_zrealizowania = current_date, kwota_platnosci = {} ;".format(id,form['status'],form['sposob'], form['kwota'])
+        insert_query = "INSERT INTO magazyn.platnosc (numer_kolejny_zamowienia, status, sposob, data_zrealizowania, kwota_platnosci)VALUES ({},\'{}\',\'{}\',current_date,{}) ;".format(id,form['status'],form['sposob'], form['kwota'])
         cur.execute(insert_query)
         con.commit()
         cur.close()

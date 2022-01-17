@@ -23,15 +23,15 @@ def get_order_column_names(cur):
         result[tables[i]] = table_data
     return result
 
-def admin_magazyn_stan_view(request):
+def admin_zamowienie_view(request):
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
-    query_db = 'SELECT * FROM magazyn.magazyn_view;'.format(request)
+    query_db = 'SELECT zamowienie_view.numer_kolejny_zamowienia,zamowienie_view.id_zamowienia, zamowienie_view.data_stworzenia, zamowienie_view.status, zamowienie_view.kwota, zamowienie_view.waluta_zamowienia FROM magazyn.zamowienie_view;'.format(request)
     result = {}
     cur.execute(query_db)
     table_data = cur.fetchall()
-    column_names = ['id_mag','ilosc','produkt','kategoria','numer magazynu','ulica','miasto','kod pocztowy']
-    result[request] = [column_names,table_data]
+    column_names = ['num. kolej. zam.', 'id zamówienia','data stworzenia','status','kwota','waluta']
+    result["Zamówienia"] = [column_names,table_data]
     cur.close()
     con.close()
     return result
@@ -57,21 +57,20 @@ def admin_pracownik_view(request):
     cur.execute(query_db)
     table_data = cur.fetchall()
     column_names = ['imie','nazwisko','email','stanowisko']
-    result[request] = [column_names,table_data]
+    result["Pracownicy"] = [column_names,table_data]
     cur.close()
     con.close()
     return result
 
-
-def admin_zamowienie_view(request):
+def admin_magazyn_stan_view(request):
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
-    query_db = 'SELECT * FROM magazyn.magazyn_view;'.format(request)
+    query_db = 'SELECT  magazyn_view.id_magazyn,magazyn_view.nr_magazynu,  magazyn_view.ulica,magazyn_view.miasto, magazyn_view.kod_pocztowy,magazyn_view.ilosc  FROM magazyn.magazyn_view;'.format(request)
     result = {}
     cur.execute(query_db)
     table_data = cur.fetchall()
-    column_names = ['numer','id','data stworzenia','status','kwota', 'id_firmy']
-    result[request] = [column_names,table_data]
+    column_names = ['id magaz.','nr. magaz.', 'ulica', 'miasto   ','kod poczt.','ilość prod. na magazynie']
+    result['Przepełnione magazyny'] = [column_names,table_data]
     cur.close()
     con.close()
     return result
@@ -220,5 +219,21 @@ def storehouse_view(id):
     return result
 
 
+def get_orders():
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    result={}
+    query_db = 'SELECT z.numer_kolejny_zamowienia, z.id_magazyn, z.data_stworzenia, z.kwota, z.waluta_zamowienia, p.status, p.sposob, p.kwota_platnosci FROM magazyn.zamowienie Z LEFT JOIN magazyn.platnosc P USING (numer_kolejny_zamowienia) ORDER BY z.numer_kolejny_zamowienia ASC;'
+    cur.execute(query_db)
+    column_names=['num. kolej. zam.', 'id_magaz.', 'data stworz. zam.', 'kwota', 'waluta', 'status', 'spos. płatności', 'kwota płatności'] 
+
+    table_data = cur.fetchall()  
+    result['PRZEGLĄD']=[column_names,table_data]
+    cur.close()
+    con.close()
+    return result
+
+
+ 
 
 
