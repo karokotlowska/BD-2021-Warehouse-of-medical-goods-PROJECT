@@ -237,3 +237,16 @@ def get_orders():
  
 
 
+def get_magazyny():
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    query_db = 'SELECT id_magazyn, nr_magazynu FROM magazyn.magazyn_lokalizacje ORDER BY nr_magazynu;'
+    cur.execute(query_db)
+    mobile_records = cur.fetchall()   
+    cur.close()
+    con.close()
+
+
+    cur.close()
+    con.close()
+    return mobile_records

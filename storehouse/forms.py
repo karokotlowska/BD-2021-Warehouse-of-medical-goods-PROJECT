@@ -10,7 +10,7 @@ class SelectProductToPurchase(forms.Form):
     cena=forms.DecimalField(required=False,label = 'cena',min_value=1)
     
 class CreateOrder(forms.Form):
-    CHOICES=([1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[7,7],[8,8],[9,9],[10,10])
+    CHOICES=admin_select.get_magazyny()
 
     id_zamowienia = forms.CharField(required=False,label = 'id_zamowienia', max_length=1000)
     id_magazyn=forms.ChoiceField(required=False,label = 'id_magazyn',choices=CHOICES)

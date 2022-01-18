@@ -29,7 +29,7 @@ class SelectToRemove(forms.Form):
 
 
 class SearchStorehouse(forms.Form):
-    CHOICES=([1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[7,7],[8,8],[9,9],[10,10])
+    CHOICES=admin_select.get_magazyny()
     magazyn=forms.ChoiceField(required=False,label = 'id_magazyn',choices=CHOICES)
     
 class SelectProductToPurchase2(forms.Form):

@@ -65,3 +65,16 @@ class UpdateLokalizacja(forms.Form):
     ulica=forms.CharField(label = 'ulica', max_length=1000)
     kod_pocztowy=forms.CharField(label = 'kod pocztowy', max_length=6)
     miasto=forms.CharField(label = 'miasto', max_length=1000)
+
+
+class InsertOperacja(forms.Form):
+    rodzaj_operacji=forms.CharField(label = 'rodzaj_operacji', max_length=3)
+    opis=forms.CharField(label = 'opis', max_length=1000)
+
+
+class InsertKontrahent(forms.Form):
+    nazwa=forms.CharField(label = 'nazwa', max_length=1000)
+    nip=forms.CharField(label = 'nip', max_length=1000)
+    numer_rachunku=forms.CharField(label = 'numer_rachunku', max_length=1000)
+
+

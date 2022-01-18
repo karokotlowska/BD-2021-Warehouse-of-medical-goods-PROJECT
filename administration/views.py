@@ -12,9 +12,9 @@ from db_handler import admin_update
 from db_handler import admin_delete
 
 from administration.forms import InsertPracownik_stanowisko
-from administration.forms import InsertPracownik
+from administration.forms import InsertPracownik, InsertKontrahent
 
-from administration.forms import UpdateWeryfikacja
+from administration.forms import UpdateWeryfikacja, InsertOperacja
 from administration.forms import UpdatePracownik, UpdateLokalizacja
 from administration.forms import UpdatePracownik_stanowisko
 
@@ -104,6 +104,26 @@ def insert_form(request,resource):
                     messages.success(request, 'Błąd dodawania.')
                 else:
                     messages.success(request, 'Dodano kategorię.')
+    elif resource =='kontrahent':
+        form = InsertKontrahent
+        if request.method == 'POST':
+            form = InsertKontrahent(request.POST)
+            if form.is_valid():
+                er=admin_insert.insert_kontrahent(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd dodawania.')
+                else:
+                    messages.success(request, 'Dodano kontrahenta.')
+    elif resource =='rodzaj_operacji':
+        form = InsertOperacja
+        if request.method == 'POST':
+            form = InsertOperacja(request.POST)
+            if form.is_valid():
+                er=admin_insert.insert_rodzaj_operacji(form.cleaned_data)
+                if er=='error':
+                    messages.success(request, 'Błąd dodawania.')
+                else:
+                    messages.success(request, 'Dodano rodzaj operacji.')
     else:
         return redirect('home')
     return render(request, 'administration/forms.html', {'form':form,'form_title':['insert',resource]})

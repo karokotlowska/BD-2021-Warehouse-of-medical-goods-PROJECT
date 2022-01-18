@@ -66,7 +66,36 @@ def insert_kategoria(form):
     try:
         con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
         cur = con.cursor()
-        insert_query = "INSERT INTO magazyn.kategoria VALUES({}, \'{}\'); ".format(form['id_kategoria'],form['opis'])
+        insert_query = "INSERT INTO magazyn.kategoria (id_kategoria, nazwa) VALUES({}, \'{}\'); ".format(form['id_kategoria'],form['opis'])
+       
+        cur.execute(insert_query)
+        con.commit()
+        cur.close()
+        con.close()
+    except (Exception, psycopg2.Error) as error:
+        print ("Error while fetching data from PostgreSQL", error)
+        return 'error'
+
+
+def insert_kontrahent(form):
+    try:
+        con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+        cur = con.cursor()
+        insert_query = "INSERT INTO magazyn.kontrahent (id_firmy, nazwa, nip, numer_rachunku) VALUES(DEFAULT, \'{}\',\'{}\', \'{}\'); ".format(form['nazwa'],form['nip'], form['numer_rachunku'])
+       
+        cur.execute(insert_query)
+        con.commit()
+        cur.close()
+        con.close()
+    except (Exception, psycopg2.Error) as error:
+        print ("Error while fetching data from PostgreSQL", error)
+        return 'error'
+
+def insert_rodzaj_operacji(form):
+    try:
+        con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+        cur = con.cursor()
+        insert_query = "INSERT INTO magazyn.rodzaj_operacji (rodzaj_operacji, opis) VALUES(\'{}\', \'{}\'); ".format(form['rodzaj_operacji'],form['opis'])
        
         cur.execute(insert_query)
         con.commit()
