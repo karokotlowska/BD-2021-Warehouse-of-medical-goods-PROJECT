@@ -103,6 +103,23 @@ def get_order_id(id_zamowienia):
         print ("Error while fetching data from PostgreSQL", error)
         return 'error'
         
+def get_order_id2(id_zamowienia):
+    try:
+        con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+        cur = con.cursor()
+        insert_query = "SELECT numer_kolejny_zamowienia FROM magazyn.zamowienie WHERE id_zamowienia =  \'{}\' AND status != \'aktywne\';".format(id_zamowienia.upper())
+        cur.execute(insert_query)
+        con.commit()
+        id= cur.fetchone()[0]
+        cur.close()
+        con.close()
+        if id==0:
+            raise Exception("Brak takiego zamowienia")
+        else:
+            return id
+    except (Exception, psycopg2.Error) as error:
+        print ("Error while fetching data from PostgreSQL", error)
+        return 'error'
    
 
 def zam_chenge_status(form,id):

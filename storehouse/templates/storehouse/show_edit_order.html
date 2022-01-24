@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% load template_filters %}
 {% csrf_token %}
-<div id = "db_container" style="padding-bottom: 10px; float:left;">
+<div id = "db_container" style="padding-bottom: 10px; ">
     {% for table,data in select.items %}
         <h1>{{table}}</h1>
         <table style="border: 1px solid grey; padding: 30px; width: 800px; ">
@@ -24,6 +24,8 @@
     {% endfor %}
 
 </div>
+
+<br>
 <div id = "db_container1" style="padding-bottom: 10px; ">
     {% for table,data in select2.items %}
         <h1>{{table}}</h1>
@@ -45,9 +47,7 @@
     {% endfor %}
 
 </div>
-{% if numer_kolejny_zamowienia %}
-            <p>Magazyn materialow medycznych - {{numer_kolejny_zamowienia}}</p>
-{% endif %}
+
 
 <a style="padding-right: 10px;" href='/add_product/?id={{numer_kolejny_zamowienia}}'>Dodaj produkty</a>
 <a style="padding-right: 10px;" href='/change_order_status/?id={{numer_kolejny_zamowienia}}'>Zmień status</a>

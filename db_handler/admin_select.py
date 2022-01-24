@@ -159,7 +159,6 @@ def edit_order_details(id):
     cur.execute(query_db)
     table_data = cur.fetchall()
     column_names = ['id_zam.','num.kolej.zam.', 'status','id_firmy', 'ilosc', 'cena','produkt','kwota']
-    #print(column_names)
     result['SZCZEGÓŁY ZAMÓWIENIA:'] = [column_names,table_data]
     cur.close()
     con.close()
@@ -223,16 +222,30 @@ def get_orders():
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
     result={}
-    query_db = 'SELECT z.numer_kolejny_zamowienia, z.id_magazyn, z.data_stworzenia, z.kwota, z.waluta_zamowienia, p.status, p.sposob, p.kwota_platnosci FROM magazyn.zamowienie Z LEFT JOIN magazyn.platnosc P USING (numer_kolejny_zamowienia) ORDER BY z.numer_kolejny_zamowienia ASC;'
+    query_db = 'SELECT platnosci_view.id_zamowienia, platnosci_view.data_stworzenia, platnosci_view.kwota, platnosci_view.waluta_zamowienia, platnosci_view.status, platnosci_view.sposob, platnosci_view.kwota_platnosci, platnosci_view.waluta_platnosci FROM magazyn.platnosci_view;'
     cur.execute(query_db)
-    column_names=['num. kolej. zam.', 'id_magaz.', 'data stworz. zam.', 'kwota', 'waluta', 'status', 'spos. płatności', 'kwota płatności'] 
+    column_names=['id zamówienia', 'data stworz. zam.', 'kwota', 'waluta', 'status', 'spos. płatności', 'kwota płatności', 'waluta płatności'] 
 
     table_data = cur.fetchall()  
-    result['PRZEGLĄD']=[column_names,table_data]
+    result['PRZEGLĄD PŁATNOŚCI ZAMÓWIEŃ']=[column_names,table_data]
     cur.close()
     con.close()
     return result
 
+
+def get_orders_2():
+    con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
+    cur = con.cursor()
+    result={}
+    query_db = 'SELECT z.id_zamowienia,z.data_stworzenia FROM magazyn.zamowienie z WHERE z.status != \'aktywne\';'
+    cur.execute(query_db)
+    column_names=['id zamówienia', 'data stworzenia zamówienia'] 
+
+    table_data = cur.fetchall()  
+    result['Zamówienia do przyjęcia:']=[column_names,table_data]
+    cur.close()
+    con.close()
+    return result
 
  
 

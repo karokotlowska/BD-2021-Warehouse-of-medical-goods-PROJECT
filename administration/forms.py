@@ -43,8 +43,6 @@ class UpdatePracownik(forms.Form):
     imie = forms.CharField(label = 'imie', max_length=1000)
     email= forms.CharField(label = 'email', max_length=1000)
     nazwisko= forms.CharField(label = 'nazwisko', max_length=1000)
-    login=forms.CharField(label = 'login', max_length=1000)
-    haslo=forms.CharField(label = 'haslo', max_length=1000)
 
 class UpdatePracownik_stanowisko(forms.Form):
     id_stanowisko = forms.CharField(label = 'id_stanowisko', max_length=3)

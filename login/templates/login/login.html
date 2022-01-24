@@ -6,7 +6,7 @@
 {% if fail %}
     <p id ="fail">{{fail}}</p>
 {% endif %}
-<p></p>
+
     <form id = "form" method="POST">
         {% csrf_token %}
         {% for question in form %}

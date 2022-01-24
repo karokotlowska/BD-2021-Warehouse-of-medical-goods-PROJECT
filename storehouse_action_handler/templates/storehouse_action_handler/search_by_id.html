@@ -13,4 +13,29 @@
         <button type="submit">Zatwierdź</button>
     </form>
 </div>
+
+<div id = "db_container1" style="padding-bottom: 10px; ">
+    {% for table,data in select2.items %}
+        <h1>{{table}}</h1>
+        <table style="border: 1px solid grey; padding: 30px; width: 500px;">
+            <tr>
+                {% for column_name in data|access:0 %}
+                    <td class="db_cell"><h3>{{column_name }}</h3></td>
+                {% endfor %}
+            </tr>
+            
+            {% for row in data|access:1 %}
+                <tr>
+                    {% for info in row %}
+                        <td class="db_cell">{{info}}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    {% endfor %}
+
+</div>
+
+
+
 {% endblock content %}

@@ -23,21 +23,22 @@ def receipt(request):
     role=get_session_role(request)
     print("rola: "+role)
     print(form.errors)
+    select2=admin_select.get_orders_2()
     if role=='mag':
             form=SearchOrder(request.POST)
             if form.is_valid():
                 if request.method=='POST':
                     return search_order_view(request, form.cleaned_data)
-                return render(request, 'storehouse_action_handler/search_by_id.html', {'form':form,'form_title':['przyjmij','zamówienie']})     
+                return render(request, 'storehouse_action_handler/search_by_id.html', {'form':form,'form_title':['przyjmij','zamówienie'], 'select2':select2})     
     else:
         return HttpResponse('Brak dostępu', status=401)
 
 
 
 def search_order_view(request, form_data):
-    id=zam_order.get_order_id(form_data['id_zamowienia'])
+    id=zam_order.get_order_id2(form_data['id_zamowienia'])
     if id=='error':
-        messages.success(request, 'Takie zamówienie nie istnieje.')
+        messages.success(request, 'Takie zamówienie nie istnieje lub nie ma odpowiedniego statusu.')
         form=SearchOrder
         return render(request, 'storehouse_action_handler/search_by_id.html', {'form':form,'form_title':['przyjmij','zamówienie']})
     else:
@@ -83,7 +84,7 @@ def removal(request):
             if form.is_valid():
                 if request.method=='POST':
                     return search_order_view_remove(request, form.cleaned_data)
-                return render(request, 'storehouse_action_handler/search_by_id_removal.html', {'form':form,'data':data,'products':products,'form_title':['wydaj','produkty'],'numer_kolejny_zamowienia':id})     
+                return render(request, 'storehouse_action_handler/search_by_id_removal.html', {'form':form,'data':data,'products':products,'form_title':['wybierz','magazyn'],'numer_kolejny_zamowienia':id})     
     else:
         return HttpResponse('Brak dostępu', status=401)
 

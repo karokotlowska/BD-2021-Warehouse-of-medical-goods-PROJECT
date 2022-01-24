@@ -69,7 +69,7 @@ def insert_form(request,resource):
             if form.is_valid():
                 er=admin_insert.insert_pracownik_stanowisko(form.cleaned_data)
                 if er=='error':
-                    messages.success(request, 'Takie stanowisko już istnieje.')
+                    messages.success(request, 'Sprawdź czy id_stanowisko ma co najwyżej trzy litery lub czy takie stanowisko już istnieje.')
                 else:
                     messages.success(request, 'Dodano stanowisko.')
 
@@ -101,7 +101,7 @@ def insert_form(request,resource):
             if form.is_valid():
                 er=admin_insert.insert_kategoria(form.cleaned_data)
                 if er=='error':
-                    messages.success(request, 'Błąd dodawania.')
+                    messages.success(request, 'Błąd dodawania - najprawdopodobniej taka kategoria już istnieje.')
                 else:
                     messages.success(request, 'Dodano kategorię.')
     elif resource =='kontrahent':

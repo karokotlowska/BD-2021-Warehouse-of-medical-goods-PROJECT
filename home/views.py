@@ -32,5 +32,8 @@ def profile(request):
             select=admin_select.admin_profile_select("Dane:",id)
             return render(request,'home/profile.html',{'select':select,'title':'login','user_acces_zam':1})
             #return render(request, 'home/profile.html',{'title':'login','user_acces_zam':1})
+        if role=='error':
+            return render(request, 'home/home.html')
+
     else:
         return HttpResponse('Brak dostępu', status=401)

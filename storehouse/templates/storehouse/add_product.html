@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 {% load template_filters %}
 {% csrf_token %}
-<div id = "db_container" style="padding-bottom: 10px; float:left;">
+<div id = "db_container" style="padding-bottom: 10px; ">
     {% for table,data in select.items %}
         <h1>{{table}}</h1>
         <table style="border: 1px solid grey; padding: 30px; width: 800px;">
@@ -24,6 +24,9 @@
     {% endfor %}
 
 </div>
+
+<br>
+
 <div id = "db_container1" style="padding-bottom: 10px; ">
     {% for table,data in select2.items %}
         <h1>{{table}}</h1>

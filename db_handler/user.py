@@ -48,12 +48,16 @@ class User:
         return login_status
 
     def get_staff_id(self,login_data):
-        cursor = self.connection.cursor()
-        get_staff_member_id_query = "SELECT id_pracownik FROM magazyn.weryfikacja WHERE login = \'{}\'".format(login_data['login'])
-        cursor.execute(get_staff_member_id_query)
-        staff_member_record = cursor.fetchone() 
-        cursor.close()
-        return staff_member_record[0]
+        try:
+            cursor = self.connection.cursor()
+            get_staff_member_id_query = "SELECT id_pracownik FROM magazyn.weryfikacja WHERE login = \'{}\'".format(login_data['login'])
+            cursor.execute(get_staff_member_id_query)
+            staff_member_record = cursor.fetchone() 
+            cursor.close()
+            return staff_member_record[0]
+        except (Exception, psycopg2.Error) as error:
+            print ("Error while fetching data from PostgreSQL", error)
+            return 'error'
 
     def check_menu(self, usertype):
         if usertype[0]=='adm':
