@@ -92,7 +92,7 @@ def admin_produkty_view(request):
 def productList():
     con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
     cur = con.cursor()
-    query_db = 'SELECT listaproduktow.id_prdukt, listaproduktow.opis FROM ListaProduktow();'
+    query_db = 'SELECT id_produkt, opis FROM magazyn.produkt;'
     cur.execute(query_db)
     mobile_records = cur.fetchall()   
     cur.close()
