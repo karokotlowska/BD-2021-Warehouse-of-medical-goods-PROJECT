@@ -20,8 +20,7 @@ def delete_pracownik(form):
     try:
         con = psycopg2.connect(database=settings.DATABASE['NAME'], user=settings.DATABASE['USER'], password=settings.DATABASE['PASSWORD'], host=settings.DATABASE['HOST'], port=settings.DATABASE['PORT'])
         cur = con.cursor()
-        insert_query ="DELETE FROM magazyn.pracownik_role WHERE id_pracownik= \'{}\' ;".format(form['id_pracownik'])
-        insert_query += "DELETE FROM magazyn.weryfikacja WHERE id_pracownik= \'{}\' ;".format(form['id_pracownik'])
+        insert_query = "DELETE FROM magazyn.weryfikacja WHERE id_pracownik= \'{}\' ;".format(form['id_pracownik'])
         insert_query += "DELETE FROM magazyn.pracownik WHERE id_pracownik= \'{}\' ;".format(form['id_pracownik'])
         cur.execute(insert_query)
         con.commit()
