@@ -27,8 +27,8 @@ class InsertKategoria(forms.Form):
 class InsertLokalizacja(forms.Form):
     id_magazyn=forms.IntegerField(label = 'id magazynu', min_value=1)
     nr_magazynu=forms.IntegerField(label = 'numer magazynu', min_value=1)
-    ulica=forms.CharField(label = 'ulica', max_length=6)
-    kod_pocztowy=forms.CharField(label = 'kod pocztowy', max_length=1000)
+    ulica=forms.CharField(label = 'ulica',max_length=1000 )
+    kod_pocztowy=forms.CharField(label = 'kod pocztowy',max_length=6 )
     miasto=forms.CharField(label = 'miasto', max_length=1000)
 
 
